@@ -1,0 +1,10 @@
+2024-01-15T10:30:00Z|ERROR|payment-service|Connection timeout|trace-001
+2024-01-15T10:30:01Z|INFO|auth-service|User logged in|trace-002
+2024-01-15T10:30:02Z|WARN|inventory-service|Low stock alert|trace-003
+2024-01-15T10:30:03Z|ERROR|payment-service|Database connection failed|trace-004
+2024-01-15T10:30:04Z|DEBUG|auth-service|Token validated|trace-005
+2024-01-15T10:30:05Z|FATAL|payment-service|Service crashed|trace-006
+bad-timestamp|UNKNOWN|  |  
+2024-01-15T10:30:07Z|ERROR|inventory-service|Out of stock|trace-008
+2024-01-15T10:30:08Z|INFO|auth-service|Password reset|trace-009
+2024-01-15T10:30:09Z|WARN|payment-service|High latency detected|trace-010

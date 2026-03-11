@@ -1,17 +1,21 @@
 package com.ankit.pipeline
 
 import cats.effect.*
+import fs2.*
+import com.ankit.pipeline.kafka.LogKafkaConsumer
 import com.ankit.pipeline.pipeline.Parser
 import cats.data.Validated.*
 
 object Main extends IOApp.Simple:
   def run: IO[Unit] =
-    val validLog   = "2024-01-15T10:30:00Z|ERROR|payment-service|Connection timeout|trace-123"
-    val invalidLog = "bad-timestamp|UNKNOWN|  |  "
-
-    val result1 = Parser.parse(validLog)
-    val result2 = Parser.parse(invalidLog)
-
-    IO.println("=== Parser Test ===") *>
-    IO.println(s"Valid log result:   $result1") *>
-    IO.println(s"Invalid log result: $result2")
+    IO.println("=== Kafka Pipeline Starting ===") *>
+    LogKafkaConsumer
+      .stream("localhost:9092", "app-logs")
+      .map(Parser.parse)
+      .evalMap {
+        case Valid(entry) =>
+          IO.println(s"✅ [${entry.level}] ${entry.service} — ${entry.message}")
+        case Invalid(errs) =>
+          IO.println(s"❌ Errors: ${errs.toList.mkString(", ")}")
+      }
+      .compile.drain

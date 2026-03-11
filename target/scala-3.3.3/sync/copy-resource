@@ -1,1 +1,1 @@
-[[{},{}],{}]
+[[{"${BASE}/src/main/resources/sample-logs.txt":["${BASE}/target/scala-3.3.3/classes/sample-logs.txt"]},{"${BASE}/target/scala-3.3.3/classes/sample-logs.txt":["${BASE}/src/main/resources/sample-logs.txt"]}],{"${BASE}/src/main/resources/sample-logs.txt":{"file":"file:///home/anni_rain1/log-analytics-pipeline/src/main/resources/sample-logs.txt","lastModified":1773240848829}}]
