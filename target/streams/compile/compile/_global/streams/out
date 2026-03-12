@@ -1,7 +1,12 @@
-[0m[[0m[31merror[0m] [0m[0m[31m[31m-- [E103] Syntax Error: /home/anni_rain1/log-analytics-pipeline/src/main/scala/com/ankit/pipeline/Main.scala:6:0 [0m[0m[0m
-[0m[[0m[31merror[0m] [0m[0m[31m6 |[0mBoy1[0m
-[0m[[0m[31merror[0m] [0m[0m[31m[31m  |[0m^^^^[0m[0m
-[0m[[0m[31merror[0m] [0m[0m[31m  |[0mIllegal start of toplevel definition[0m
-[0m[[0m[31merror[0m] [0m[0m[31m  |[0m[0m
-[0m[[0m[31merror[0m] [0m[0m[31m  |[0m longer explanation available when compiling with `-explain`[0m
+[0m[[0m[31merror[0m] [0m[0m[31m[31m-- [E008] Not Found Error: /home/anni_rain1/log-analytics-pipeline/src/main/scala/com/ankit/pipeline/pipeline/AlertEngine.scala:53:15 [0m[0m[0m
+[0m[[0m[31merror[0m] [0m[0m[31m53 |[0m      uri    = [31muri"https://webhook.site/your-webhook-id"[0m[0m
+[0m[[0m[31merror[0m] [0m[0m[31m[31m   |[0m               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m[0m
+[0m[[0m[31merror[0m] [0m[0m[31m   |[0mvalue uri is not a member of StringContext, but could be made available as an extension method.[0m
+[0m[[0m[31merror[0m] [0m[0m[31m   |[0m[0m
+[0m[[0m[31merror[0m] [0m[0m[31m   |[0mOne of the following imports might fix the problem:[0m
+[0m[[0m[31merror[0m] [0m[0m[31m   |[0m[0m
+[0m[[0m[31merror[0m] [0m[0m[31m   |[0m  import org.http4s.implicits.uri[0m
+[0m[[0m[31merror[0m] [0m[0m[31m   |[0m  import org.http4s.syntax.all.uri[0m
+[0m[[0m[31merror[0m] [0m[0m[31m   |[0m  import org.http4s.syntax.literals.uri[0m
+[0m[[0m[31merror[0m] [0m[0m[31m   |[0m[0m
 [0m[[0m[31merror[0m] [0m[0mone error found[0m

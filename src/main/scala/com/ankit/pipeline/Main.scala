@@ -1,19 +1,18 @@
 package com.ankit.pipeline
 
 import cats.effect.*
-import cats.effect.std.Queue
 import doobie.*
 import doobie.hikari.*
 import org.http4s.ember.server.EmberServerBuilder
+import org.http4s.ember.client.EmberClientBuilder
 import org.http4s.server.Router
 import com.comcast.ip4s.*
 import com.ankit.pipeline.kafka.LogKafkaConsumer
-import com.ankit.pipeline.pipeline.{Parser, Aggregator}
+import com.ankit.pipeline.pipeline.{Parser, Aggregator, AlertEngine}
 import com.ankit.pipeline.db.MetricsRepo
 import com.ankit.pipeline.api.HttpApi
 import cats.data.Validated.*
 import scala.concurrent.duration.*
-import fs2.Stream
 
 object Main extends IOApp.Simple:
 
@@ -27,17 +26,20 @@ object Main extends IOApp.Simple:
     )
 
   def run: IO[Unit] =
-    transactor.use { xa =>
-      given Transactor[IO] = xa
-
-      val serverResource = EmberServerBuilder
+    val appResource = for
+      xa     <- transactor
+      client <- EmberClientBuilder.default[IO].build
+      server <- EmberServerBuilder
         .default[IO]
         .withHost(ipv4"0.0.0.0")
         .withPort(port"8081")
-        .withHttpApp(Router("/" -> HttpApi.routes).orNotFound)
+        .withHttpApp(Router("/" -> HttpApi.routes(using xa)).orNotFound)
         .build
+    yield (xa, client)
 
-      // Ek hi stream — dono kaam karo
+    appResource.use { (xa, client) =>
+      given Transactor[IO] = xa
+
       val pipeline =
         LogKafkaConsumer
           .stream("172.25.190.6:9092", "app-logs")
@@ -50,14 +52,13 @@ object Main extends IOApp.Simple:
           }
           .through(Aggregator.windowPipe(30.seconds))
           .through(Aggregator.criticalOnly)
-          .evalMap { metrics =>
+          .evalTap { metrics =>
             MetricsRepo.insertWindowMetrics(metrics) *>
             IO.println(s"📊 Window [${metrics.level}] ${metrics.service} — count: ${metrics.count}")
           }
+          .through(AlertEngine.alertPipe(client))
 
-      serverResource.use { _ =>
-        IO.println("=== API Server started at http://localhost:8081 ===") *>
-        IO.println("=== Kafka Pipeline Starting ===") *>
-        pipeline.compile.drain
-      }
+      IO.println("=== API Server started at http://localhost:8081 ===") *>
+      IO.println("=== Kafka Pipeline Starting ===") *>
+      pipeline.compile.drain
     }

@@ -17,14 +17,20 @@ case class MetricsResponse(
   infoCount: Long,
   debugCount: Long
 )
-
 object MetricsResponse:
   given Encoder[MetricsResponse] = deriveEncoder
 
 case class ErrorsResponse(recentErrors: List[String])
-
 object ErrorsResponse:
   given Encoder[ErrorsResponse] = deriveEncoder
+
+case class AlertEntry(service: String, level: String, count: Long)
+object AlertEntry:
+  given Encoder[AlertEntry] = deriveEncoder
+
+case class AlertsResponse(alerts: List[AlertEntry])
+object AlertsResponse:
+  given Encoder[AlertsResponse] = deriveEncoder
 
 object HttpApi:
 
@@ -47,5 +53,12 @@ object HttpApi:
         for
           errs <- MetricsRepo.recentErrors(10)
           resp <- Ok(ErrorsResponse(errs).asJson)
+        yield resp
+
+      case GET -> Root / "alerts" =>
+        for
+          rawAlerts <- MetricsRepo.getAlerts
+          alerts = rawAlerts.map { case (svc, lvl, cnt) => AlertEntry(svc, lvl, cnt) }
+          resp <- Ok(AlertsResponse(alerts).asJson)
         yield resp
     }
