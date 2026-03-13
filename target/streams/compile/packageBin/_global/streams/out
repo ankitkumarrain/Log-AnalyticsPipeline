@@ -172,6 +172,8 @@
 [0m[[0m[0mdebug[0m] [0m[0m	  /home/anni_rain1/log-analytics-pipeline/target/scala-3.3.3/classes/com/ankit/pipeline/kafka/LogKafkaConsumer.tasty[0m
 [0m[[0m[0mdebug[0m] [0m[0m	com/ankit/pipeline/kafka/LogKafkaConsumer$$anon$1.class[0m
 [0m[[0m[0mdebug[0m] [0m[0m	  /home/anni_rain1/log-analytics-pipeline/target/scala-3.3.3/classes/com/ankit/pipeline/kafka/LogKafkaConsumer$$anon$1.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	dashboard.html[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/anni_rain1/log-analytics-pipeline/target/scala-3.3.3/classes/dashboard.html[0m
 [0m[[0m[0mdebug[0m] [0m[0m	application.conf[0m
 [0m[[0m[0mdebug[0m] [0m[0m	  /home/anni_rain1/log-analytics-pipeline/target/scala-3.3.3/classes/application.conf[0m
 [0m[[0m[0mdebug[0m] [0m[0m	logback.xml[0m

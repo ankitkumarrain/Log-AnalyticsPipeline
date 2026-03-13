@@ -4,19 +4,16 @@ import cats.effect.*
 import org.http4s.*
 import org.http4s.dsl.io.*
 import org.http4s.circe.*
+import org.http4s.headers.*
 import io.circe.generic.semiauto.*
 import io.circe.syntax.*
 import io.circe.*
 import doobie.*
 import com.ankit.pipeline.db.MetricsRepo
 import com.ankit.pipeline.domain.LogLevel
+import scala.io.Source
 
-case class MetricsResponse(
-  errorCount: Long,
-  warnCount: Long,
-  infoCount: Long,
-  debugCount: Long
-)
+case class MetricsResponse(errorCount: Long, warnCount: Long, infoCount: Long, debugCount: Long)
 object MetricsResponse:
   given Encoder[MetricsResponse] = deriveEncoder
 
@@ -36,6 +33,10 @@ object HttpApi:
 
   def routes(using xa: Transactor[IO]): HttpRoutes[IO] =
     HttpRoutes.of[IO] {
+
+      case GET -> Root =>
+        val html = Source.fromResource("dashboard.html").mkString
+        Ok(html).map(_.withContentType(`Content-Type`(MediaType.text.html)))
 
       case GET -> Root / "health" =>
         Ok("Pipeline is running!")
